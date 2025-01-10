@@ -1,0 +1,90 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>{{ news.title }}</title>-->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='css/detail.css') }}">-->
+<!--</head>-->
+<!--<body>-->
+<!--    <header>-->
+<!--        <h1>{{ news.title }}</h1>-->
+<!--        <div class="auth-links">-->
+<!--            {% if username %}-->
+<!--            <span>Welcome, {{ username }}!</span>-->
+<!--            <a href="{{ url_for('logout') }}">Logout</a>-->
+<!--            {% else %}-->
+<!--            <a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a>-->
+<!--            {% endif %}-->
+<!--        </div>-->
+<!--    </header>-->
+<!--    <div class="detail-container">-->
+<!--        <div class="photo">-->
+<!--            <img src="{{ url_for('static', filename='uploads/' ~ news.photo_filename) }}" alt="News Photo">-->
+<!--        </div>-->
+<!--        <div class="content">-->
+<!--            <p>{{ news.text }}</p>-->
+<!--        </div>-->
+<!--        <div class="comments-section">-->
+<!--            <h3>Comments</h3>-->
+<!--            {% if username %}-->
+<!--            <form action="{{ url_for('news_detail', news_id=news.id) }}" method="post">-->
+<!--                <textarea name="comment" rows="4" required></textarea>-->
+<!--                <button type="submit">Add Comment</button>-->
+<!--            </form>-->
+<!--            {% else %}-->
+<!--            <p><a href="{{ url_for('login') }}">Log in</a> to add a comment.</p>-->
+<!--            {% endif %}-->
+<!--            {% for comment in comments %}-->
+<!--            <div class="comment">-->
+<!--                <strong>{{ comment.user.username }}</strong>-->
+<!--                <p>{{ comment.comment }}</p>-->
+<!--                {% if username == comment.user.username %}-->
+<!--                <form action="{{ url_for('edit_comment', comment_id=comment.id) }}" method="post">-->
+<!--                    <textarea name="comment" rows="2">{{ comment.comment }}</textarea>-->
+<!--                    <button type="submit">Edit</button>-->
+<!--                </form>-->
+<!--                <form action="{{ url_for('delete_comment', comment_id=comment.id) }}" method="post">-->
+<!--                    <button type="submit">Delete</button>-->
+<!--                </form>-->
+<!--                {% endif %}-->
+<!--            </div>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->
+{% extends "base.html" %}
+
+{% block title %}News Detail{% endblock %}
+
+{% block content %}
+<h2>{{ news.title }}</h2>
+<img src="{{ url_for('static', filename='uploads/' ~ news.photo_filename) }}" alt="{{ news.title }}">
+<p>{{ news.text }}</p>
+
+<h3>Comments</h3>
+<ul>
+    {% for comment in comments %}
+        <li>{{ comment.comment }} - by {{ comment.user.username }}
+            {% if session.get('user_id') == comment.user_id %}
+                <form method="post" action="{{ url_for('delete_comment', comment_id=comment.id) }}">
+                    <button type="submit">Delete</button>
+                </form>
+                <form method="post" action="{{ url_for('edit_comment', comment_id=comment.id) }}">
+                    <input type="text" name="comment" value="{{ comment.comment }}">
+                    <button type="submit">Edit</button>
+                </form>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+{% if session.get('user_id') %}
+    <form method="post" action="{{ url_for('news_detail', news_id=news.id) }}">
+        <label for="comment">Add Comment</label>
+        <input type="text" id="comment" name="comment">
+        <button type="submit">Add</button>
+    </form>
+{% endif %}
+{% endblock %}

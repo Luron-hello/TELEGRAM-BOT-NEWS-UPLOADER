@@ -1,0 +1,75 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Новости Телеграмма</title>-->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">-->
+<!--</head>-->
+<!--<body>-->
+<!--<header>-->
+<!--    <h1>NewsBot</h1>-->
+<!--    <div class="auth-links">-->
+<!--        {% if username %}-->
+<!--            <span>Welcome, {{ username }}!</span>-->
+<!--            <a href="{{ url_for('logout') }}">Logout</a>-->
+<!--        {% else %}-->
+<!--            <a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a>-->
+<!--        {% endif %}-->
+<!--    </div>-->
+<!--</header>-->
+
+<!--<div class="container">-->
+<!--    <div class="telegram-news">-->
+<!--        {% for message in telegram_messages %}-->
+<!--        <div class="news">-->
+<!--            <div class="message-box">-->
+<!--                <h3>Новость:</h3>-->
+<!--                <p>{{ message }}</p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+
+<!--    <div class="site-news">-->
+<!--        {% for news in news_list %}-->
+<!--        <div class="news">-->
+<!--            <a href="{{ url_for('news_detail', news_id=news.id) }}" class="news-link">-->
+<!--                <div class="photo">-->
+<!--                    <img src="{{ url_for('static', filename='uploads/' + news.photo_filename) }}" alt="News Photo">-->
+<!--                </div>-->
+<!--                <div class="content">-->
+<!--                    <h3>{{ news.title }}</h3>-->
+<!--                    <p>{{ news.description }}</p>-->
+<!--                </div>-->
+<!--            </a>-->
+<!--        </div>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<footer>-->
+<!--    <div class="footer-content">-->
+<!--        <p>Контакты: newsbot@gmail.com | Телефон: +123456789</p>-->
+<!--    </div>-->
+<!--</footer>-->
+
+<!--</body>-->
+<!--</html>-->
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2>News</h2>
+<ul>
+    {% for news in news_list %}
+        <li>
+            <h3><a href="{{ url_for('news_detail', news_id=news.id) }}">{{ news.title }}</a></h3>
+            <p>{{ news.description }}</p>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+
